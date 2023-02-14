@@ -1,0 +1,135 @@
+/* Global Rules */
+
+.flex-container {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Global Presets */
+
+body {
+  background-color: #e8ffff;
+  color: #213e3b;
+  font-family: "Raleway", sans-serif;
+  line-height: 200%;
+}
+
+main {
+  width: 80%;
+  margin: auto;
+}
+
+img {
+  max-width: 80%;
+}
+
+/* navagation bar */
+
+body > header {
+  top: 0;
+  background-color: azure;
+}
+
+body header a {
+  all:unset;
+  cursor: pointer;
+}
+
+header, nav {
+  position: sticky;
+}
+
+#logo {
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+#menu {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#menu li {
+  display: inline-block
+}
+
+/* main */
+
+body > footer {
+  bottom: 0;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  color: #7579e7;
+  font-size: 40px;
+}
+
+h2 {
+  color: #41aea9;
+  font-size: 28px;
+}
+
+#cover-section {
+  text-align: left;
+}
+
+#cover-section p:first-of-type {
+  color: #41aea9;
+  font-size: 28px;
+}
+
+a {
+  font-style: italic;
+}
+
+#quote {
+  text-align: center;
+}
+
+#quote > blockquote {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#quote > footer {
+  font-size: 14px;
+  text-align: right;
+}
+
+#class-container {
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.class-cards {
+  position: relative;
+  background-color: #555555;
+  margin: 15px;
+  height: 200px;
+  width: 150px;
+}
+
+.class-cards > p {
+  color: #cdc9c3;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 50%; /* width will be 50% of the parent */
+  height: 50%; /* height will be 50% of the parent */
+}
+
+.class-cards > p:hover {
+  opacity: 1;
+}

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Snow-miku/Dev-Toolchain-JRPG#readme",
   "dependencies": {
     "p5.play": "^3.6.2",
+    "pixi.js": "^7.1.2",
     "three": "^0.149.0"
   },
   "devDependencies": {

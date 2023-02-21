@@ -20,10 +20,16 @@
   },
   "homepage": "https://github.com/Snow-miku/Dev-Toolchain-JRPG#readme",
   "dependencies": {
+<<<<<<< HEAD
     "p5.play": "^3.5.26",
+=======
+    "p5.play": "^3.6.2",
+    "pixi.js": "^7.1.2",
+>>>>>>> 47c82e42ecccc4b46cb2220b522fc65116e2ecae
     "three": "^0.149.0"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@web/dev-server": "^0.1.35",
     "gh-pages": "^5.0.0",
     "rollup": "^2.79.1",

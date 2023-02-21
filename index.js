@@ -24,13 +24,14 @@ class Button {
   }
 }
 
-let backtrack, drum;
+let battleMusic, winMusic, attackSound;
 let shapes = ["circle", "square"];
 
 function preload() {
   colors = loadJSON("/media/color-palette.json");
-  backtrack = loadSound("/media/backtrack.mp3");
-  drum = loadSound("/media/drum.mp3");
+  battleMusic = loadSound("/media/battle.mp3");
+  winMusic = loadSound("/media/win.mp3");
+  attackSound = loadSound("/media/attack.mp3");
 }
 
 let x, y, button, backgroundColor, curStroke;
@@ -52,8 +53,8 @@ function setup() {
 
   frameRate(20);
 
-  //sound files set up
-  backtrack.setVolume(2);
+  //sound volume change
+  battleMusic.setVolume(0.3);
   backgroundColor = random(colors.list);
 }
 
@@ -69,13 +70,13 @@ function mousePressed () {
   if (button.contains(mouseX, mouseY) && !gameStart) {
     console.log("contains");
     gameStart = true;
-    backtrack.play();
+    battleMusic.play();
   } else {
     console.log("not contains");
   }
   if (gameStart) {
     if (curStroke != 0) {
-      drum.play();
+      attackSound.play();
 
       //draw random numbers of random shapes
       repeats = random(5, 21)

@@ -9,9 +9,9 @@ module.exports = {
   plugins: [
     copy({
       targets: [
-        { src: ["index.html", "index.css","media"], dest: "dist" }
+        { src: ["index.html","media"], dest: "dist" }
       ],
     }),
     nodeResolve(),
-  ],
+  ]
 };

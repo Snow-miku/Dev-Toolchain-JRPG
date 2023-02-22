@@ -6,10 +6,11 @@ module.exports = {
   output: {
     dir: "dist",
   },
+  treeshake: false,
   plugins: [
     copy({
       targets: [
-        { src: ["index.html","media"], dest: "dist" }
+        { src: ["index.html","media", "index.css"], dest: "dist" }
       ],
     }),
     nodeResolve(),

@@ -12,7 +12,8 @@ function preload() {
 
 const textSize = 50;
 let x, y;
-let startButton, attackButton, hpBar1, hpBar2, char1, char2, hp2;
+let startButton, attackButton, winPrompt;
+let hpBar1, hpBar2, char1, char2, hp2;
 
 // Create a new canvas to the browser size
 function setup() {
@@ -46,7 +47,16 @@ function setup() {
   attackButton.shapeColor = color(0, 0, 0, 0);
   attackButton.strokeColor = colors.blue1;
   attackButton.strokeWeight = 4;
-  //attackButton.visible = false;
+
+  winPrompt = new Sprite();
+  winPrompt.textSize = 100;
+  winPrompt.text = "YOU WIN!!";
+  winPrompt.textColor = colors.pink4;
+  winPrompt.shapeColor = color(0, 0, 0, 0);
+  winPrompt.strokeColor = color(0, 0, 0, 0);
+  winPrompt.strokeWeight = 10;
+  winPrompt.collider = "none"; // set the colliding space to zero
+  winPrompt.depth = 10000;
 
   hpBar1 = genHealthBar();
   hpBar1.x = x * 0.5;
@@ -132,16 +142,17 @@ function attack() {
   console.log("Attacked!");
   attackSound.stop();
   attackSound.play();
-  // char2.changeImage("hit");
-  // setTimeout(() => {
-  //   char2.changeImage("char");
-  // }, 100);
+  char2.changeImage("hit");
+  setTimeout(() => {
+    char2.changeImage("char");
+  }, 100);
   hp2 -= 20;
 }
 
 function winGame() {
   console.log("YOU WIN!!");
   battleMusic.stop();
+  winPrompt.visible = true;
   setTimeout(() => {
     winMusic.play();
   }, 1000);
@@ -155,6 +166,8 @@ function initGame() {
   //switch visibility
   startButton.visible = true;
   attackButton.visible = false;
+  winPrompt.visible = false;
+
   hpBar1.visible = false;
   hpBar2.visible = false;
   char1.visible = false;
@@ -176,7 +189,8 @@ function genHealthBar() {
   hp.y = y * 0.2;
   hp.h = 20;
   hp.width = x / 2;
-  //hp.visible = false;
+  hp.collider = "none";
+  hp.depth = 1;
   return hp;
 }
 
@@ -190,6 +204,7 @@ function genCharacter(link) {
   char.strokeWeight = 3;
   char.h = 20;
   char.width = x / 2;
-  //hp.visible = false;
+  char.collider = "none";
+  char.depth = 0;
   return char;
 }

@@ -6,14 +6,19 @@ function preload() {
   winMusic = loadSound("/media/win.mp3");
   attackSound = loadSound("/media/attack.mp3");
   goku = loadImage("/media/goku.png");
-  tom = loadImage("/media/tom.png");
+  tom = loadImage("/media/tom-normal.png");
+  tomDefeated = loadImage("/media/tom-defeated.png");
   hit = loadImage("/media/hit.png");
 }
 
 const textSize = 50;
 let x, y;
-let startButton, attackButton, winPrompt;
-let hpBar1, hpBar2, char1, char2, hp2;
+let startButton, attackButton, winPrompt, dmgDisplay;
+let hpBar1, hpBar2, hpBar1Outlin, hpBar2Outline, char1, char2, hitSprite;
+
+let hp2, hp2Cur, hp2Width, hp2WidthCur;
+let timer, seconds;
+let gameStarted, attackAllowed; //the state of the game
 
 // Create a new canvas to the browser size
 function setup() {
@@ -48,40 +53,44 @@ function setup() {
   attackButton.strokeColor = colors.blue1;
   attackButton.strokeWeight = 4;
 
-  winPrompt = new Sprite();
-  winPrompt.textSize = 100;
-  winPrompt.text = "YOU WIN!!";
-  winPrompt.textColor = colors.pink4;
-  winPrompt.shapeColor = color(0, 0, 0, 0);
-  winPrompt.strokeColor = color(0, 0, 0, 0);
-  winPrompt.strokeWeight = 10;
-  winPrompt.collider = "none"; // set the colliding space to zero
-  winPrompt.depth = 10000;
+  winPrompt = genText("YOU WIN!!");
 
-  hpBar1 = genHealthBar();
+  dmgDisplay = genText("");
+  dmgDisplay.x = x * 1.5;
+  dmgDisplay.y = y * 0.5;
+
+  hpBar1 = genHealthBar(false);
   hpBar1.x = x * 0.5;
-  hpBar2 = genHealthBar();
+  hpBar2 = genHealthBar(false);
   hpBar2.x = x * 1.5;
+  hpBar1Outline = genHealthBar(true);
+  hpBar1Outline.x = x * 0.5;
+  hpBar2Outline = genHealthBar(true);
+  hpBar2Outline.x = x * 1.5;
+  hp2Width = hpBar2.width;
 
-  goku.resize(width/3, 0);
+  goku.resize(width/3.5, 0);
   char1 = genCharacter(goku);
   char1.x = x * 0.5;
   tom.resize(width/3.5, 0);
   char2 = genCharacter(tom);
   char2.x = x * 1.5;
+  char2.addImage("defeated", tomDefeated);
+  hit.resize(width/3.5, 0);
+  hitSprite = genCharacter(hit);
+  hitSprite.x = x * 1.5;
 
   initGame();
 }
 
-let gameStarted = false; //the state of the game
-let attackAllowed = false;
-
 // On window resize, update the canvas size
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+
   //get the center of the page
   x = width / 2;
   y = height / 2;
+  //console.log(`width: ${width}, height: ${height}`);
 }
 
 function draw() {
@@ -112,7 +121,7 @@ function draw() {
         attackButton.shapeColor = color(0, 0, 0, 0);
       }
     }
-    if (hp2 <= 0) {
+    if (hp2Cur <= 0) {
       winGame();
     }
   }
@@ -122,15 +131,26 @@ function startGame() {
   console.log("Game Started");
   gameStarted = true;
   battleMusic.loop();
-  setTimeout(() => {attackAllowed = true;}, 3800);
+  setTimeout(() => {
+    attackAllowed = true;
+
+    //start timer
+    console.log("Start Timer.");
+    timer = setInterval(function() {
+      seconds++;
+    }, 10);
+  }, 3800);
 
   //switch visibility
   startButton.visible = false;
   attackButton.visible = true;
   hpBar1.visible = true;
   hpBar2.visible = true;
+  hpBar1Outline.visible = true;
+  hpBar2Outline.visible = true;
   char1.visible = true;
   char2.visible = true;
+  char2.img = "char";
 }
 
 function endGame() {
@@ -139,20 +159,39 @@ function endGame() {
 }
 
 function attack() {
-  console.log("Attacked!");
   attackSound.stop();
   attackSound.play();
-  char2.addImage("hit");
+  hitSprite.visible = true;
+  dmgDisplay.visible = true;
   setTimeout(() => {
-    char2.addImage("char");
+    hitSprite.visible = false;
   }, 100);
-  hp2 -= 20;
+  setTimeout(() => {
+    dmgDisplay.visible = false;
+  }, 500);
+
+  //damge calculation
+  let damage = Math.floor(random(500, 1000));
+  dmgDisplay.text = `- ${damage}`;
+  hp2Cur -= damage;
+  console.log(`Dealt ${damage} damage. Current hp: ${hp2Cur}.`);
+
+  //hp calculation
+  hp2WidthCur = hp2Width * (hp2Cur / hp2);;
+  hpBar2.x = 1.5 * x - (hp2Width - hp2WidthCur)/2;
+  //console.log(`healthbar x position: ${hpBar2.x}.`);
+  hpBar2.width = hp2WidthCur;
 }
 
 function winGame() {
   console.log("YOU WIN!!");
   battleMusic.stop();
+  clearInterval(timer);//stop the timer
+  console.log(`Spent ${seconds/100} seconds.`);
   winPrompt.visible = true;
+  setTimeout(() => {
+    char2.img = "defeated";
+  }, 150);
   setTimeout(() => {
     winMusic.play();
   }, 1000);
@@ -163,48 +202,73 @@ function winGame() {
 }
 
 function initGame() {
+  seconds = 0;
+
   //switch visibility
   startButton.visible = true;
   attackButton.visible = false;
   winPrompt.visible = false;
+  dmgDisplay.visible = false;
 
   hpBar1.visible = false;
   hpBar2.visible = false;
+  hpBar1Outline.visible = false;
+  hpBar2Outline.visible = false;
   char1.visible = false;
   char2.visible = false;
+  hitSprite.visible = false;
 
   //switch game state
   gameStarted = false;
+  attackAllowed = false;
 
-  //restroe character health;
-  hp2 = 100;
+  //restore character health;
+  hp2 = 10000;
+  hp2Cur = hp2;
+  hpBar2.width = hp2Width;
+  hp2WidthCur = hp2Width;
+  hpBar2.x = 1.5 * x;
+  hpBar2.width = hp2Width;
 }
 
 //create Sprite object for health bars
-function genHealthBar() {
+function genHealthBar(outline) {
   let hp = new Sprite();
-  hp.shapeColor = colors.green1;
-  hp.strokeColor = colors.pink1;
-  hp.strokeWeight = 3;
+  if (outline) {
+    hp.shapeColor = color(0, 0, 0, 0);
+    hp.strokeColor = colors.pink1;
+  } else {
+    hp.shapeColor = colors.green1;
+    hp.strokeColor = color(0, 0, 0, 0);
+  }
+  hp.strokeWeight = 6;
   hp.y = y * 0.2;
   hp.h = 20;
   hp.width = x / 2;
   hp.collider = "none";
-  hp.depth = 1;
+  hp.layer = 1;
   return hp;
 }
 
-//create Sprite object for health bars
+//create Sprite object for characters
 function genCharacter(link) {
-  let char = new Sprite(x, y, width/2);
-  char.addImage("hit", hit);
+  let char = new Sprite();
   char.addImage("char", link);
-  char.shapeColor = colors.green1;
-  char.strokeColor = colors.pink1;
-  char.strokeWeight = 3;
-  char.h = 20;
-  char.width = x / 2;
   char.collider = "none";
-  char.depth = 0;
+  char.layer = 0;
   return char;
+}
+
+//create Sprite object for characters
+function genText(text) {
+  let msg = new Sprite();
+  msg.textSize = 100;
+  msg.text = text;
+  msg.textColor = colors.pink4;
+  msg.shapeColor = color(0, 0, 0, 0);
+  msg.strokeColor = color(0, 0, 0, 0);
+  msg.strokeWeight = 10;
+  msg.collider = "none"; // set the colliding space to zero
+  msg.layer = 10;
+  return msg;
 }

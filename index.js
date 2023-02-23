@@ -1,4 +1,4 @@
-let battleMusic, winMusic, attackSound, goku, tom;
+let battleMusic, winMusic, attackSound, goku, tom, tomDefeated;
 
 function preload() {
   colors = loadJSON("/media/color-palette.json");

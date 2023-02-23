@@ -142,9 +142,9 @@ function attack() {
   console.log("Attacked!");
   attackSound.stop();
   attackSound.play();
-  char2.changeImage("hit");
+  char2.addImage("hit");
   setTimeout(() => {
-    char2.changeImage("char");
+    char2.addImage("char");
   }, 100);
   hp2 -= 20;
 }

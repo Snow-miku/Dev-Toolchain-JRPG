@@ -1,14 +1,14 @@
 let battleMusic, winMusic, attackSound, goku, tom, tomDefeated;
 
 function preload() {
-  colors = loadJSON("/media/color-palette.json");
-  battleMusic = loadSound("/media/battle.mp3");
-  winMusic = loadSound("/media/win.mp3");
-  attackSound = loadSound("/media/attack.mp3");
-  goku = loadImage("/media/goku.png");
-  tom = loadImage("/media/tom-normal.png");
-  tomDefeated = loadImage("/media/tom-defeated.png");
-  hit = loadImage("/media/hit.png");
+  colors = loadJSON("media/color-palette.json");
+  battleMusic = loadSound("media/battle.mp3");
+  winMusic = loadSound("media/win.mp3");
+  attackSound = loadSound("media/attack.mp3");
+  goku = loadImage("media/goku.png");
+  tom = loadImage("media/tom-normal.png");
+  tomDefeated = loadImage("media/tom-defeated.png");
+  hit = loadImage("media/hit.png");
 }
 
 const textSize = 50;
